@@ -11,4 +11,4 @@ const char *ptr 和 char * const ptr
   1. 倒序
   2. 环的检测
   
-结构体对齐补齐， pack
+[结构体对齐补齐， pack](https://github.com/NightStark/examination/blob/master/c-lang/align.c)
