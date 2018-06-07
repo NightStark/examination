@@ -5,7 +5,7 @@ examination for work
 
 [指针数组，数组指针](https://github.com/NightStark/examination/blob/master/c-lang/parray.c)
 
-const char *ptr 和 char * const ptr
+[const char *ptr 和 char * const ptr](https://github.com/NightStark/examination/blob/master/c-lang/const_point.c)
 
 链表
   1. 倒序
