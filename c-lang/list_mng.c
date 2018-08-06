@@ -6,6 +6,7 @@
 struct list 
 {
     struct list *next;
+    int data;
 };
 
 int get_list_cnt(struct list *head)
@@ -38,6 +39,7 @@ int generate_a_list(struct list *head)
             return -1;
         }
         memset(p, 0, sizeof(struct list));
+        p->data = i;
         if (!head->next) {
             head->next = p;
         } else {
@@ -52,6 +54,62 @@ int generate_a_list(struct list *head)
     return 0;
 }
 
+struct list * reverse_list(struct list *head)
+{
+    struct list *c = NULL;
+    struct list *T = NULL;
+    struct list *p = NULL;
+
+    if (!head) {
+        return NULL;
+    }
+
+    c = head->next;
+    
+    /* 核心语句通过变量T保证旧表不会断，新表头不丢 */
+    while (c) {
+        T = c;
+        c = c->next;
+        T->next = p;
+        p = T;
+    }
+
+    head = p;
+
+    return head;
+}
+#if 0
+struct list * reverse_list(struct list *head)
+{
+    struct list *p = NULL;
+    if (!head->next) {
+        return head;
+    }
+
+    p = reverse_list(head->next->next);
+    if (p == head->next) {
+        p->next = head;
+        return p;
+    }
+
+    return;
+}
+#endif
+
+void dump_list(struct list *head)
+{
+    struct list *p = NULL;
+
+    p = head->next;
+
+    while (p) {
+        printf("[%d]\n",p->data);
+        p = p->next;
+    }
+
+    return;
+}
+
 int main(void)
 {
     struct list head = {0};
@@ -61,6 +119,10 @@ int main(void)
 
     cnt = get_list_cnt(&head);
     printf("cnt = %d\n", cnt);
+
+    struct list *N = NULL;
+    N = reverse_list(&head);
+    dump_list(N);
 
     return 0;
 }
