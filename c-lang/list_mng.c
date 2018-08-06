@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 
 struct list 
 {
@@ -47,6 +48,51 @@ int generate_a_list(struct list *head, int cnt)
         }
         t = p;
         i++;
+    }
+
+
+
+    return 0;
+}
+
+int generate_two_list(struct list *head1, struct list *head2, int cnt)
+{
+    struct list *p = NULL;
+
+    struct list *t1 = NULL;
+    struct list *t2 = NULL;
+    int i = 0;
+
+    srand(time(0));
+
+    while (i++ < cnt) {
+        //printf("rand:%d\n", rand());
+        p = malloc(sizeof(struct list));
+        if (!p) {
+            return -1;
+        }
+        memset(p, 0, sizeof(struct list));
+        p->data = i;
+
+        if (rand() % 2 == 0) {
+            if (i < 5) { //start at 5
+                continue;
+            }
+            if (!head1->next) {
+                head1->next = p;
+            } else {
+                //continue; //only one
+                t1->next = p;    
+            }
+            t1 = p;
+        } else {
+            if (!head2->next) {
+                head2->next = p;
+            } else {
+                t2->next = p;    
+            }
+            t2 = p;
+        }
     }
 
 
@@ -189,6 +235,23 @@ struct list * find_last_k(struct list *head, int k)
     return k_t;
 }
 
+struct list *merge_sorted_list(struct list *head1, struct list *head2)
+{
+    if (!head1) {
+        return head2;
+    }
+    if (!head2) {
+        return head1;
+    }
+ 
+    if (head1->data < head2->data) {
+        return head1->next = merge_sorted_list(head1->next, head2), head1;
+    } else {
+        return head2->next = merge_sorted_list(head1, head2->next), head2;
+    }
+    
+}
+
 int main(void)
 {
     list_mng_test(0);
@@ -205,5 +268,13 @@ int main(void)
 
     printf("lk = %d\n", lk->data);
     
+    struct list A = {0};
+    struct list B = {0};
+    generate_two_list(&A, &B, 20);
+    dump_list(&A);
+    dump_list(&B);
+    struct list M = {0};
+    M.next = merge_sorted_list(A.next, B.next);
+    dump_list(&M);
 
 }
