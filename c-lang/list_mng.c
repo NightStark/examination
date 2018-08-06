@@ -27,13 +27,13 @@ int get_list_cnt(struct list *head)
     return cnt;
 }
 
-int generate_a_list(struct list *head)
+int generate_a_list(struct list *head, int cnt)
 {
     struct list *p = NULL;
     struct list *t = NULL;
     int i = 0;
 
-    while (i < 112) {
+    while (i < cnt) {
         p = malloc(sizeof(struct list));
         if (!p) {
             return -1;
@@ -74,55 +74,99 @@ struct list * reverse_list(struct list *head)
         p = T;
     }
 
-    head = p;
+    head->next = p;
 
     return head;
 }
-#if 0
-struct list * reverse_list(struct list *head)
+
+struct list * reverse_list2(struct list *head, struct list *next)
 {
     struct list *p = NULL;
-    if (!head->next) {
+    if (NULL == head) {
+        printf("error\n");
+        return NULL;
+    }
+    
+    if (NULL == next) {
+        printf("no next\n");
         return head;
     }
 
-    p = reverse_list(head->next->next);
-    if (p == head->next) {
-        p->next = head;
-        return p;
+    if (NULL == next->next) {
+        printf("only two\n");
+        next->next = head;
+        head->next = NULL;
+        return next;
     }
 
-    return;
+    p = reverse_list2(next, next->next);
+    if (!p) {
+        printf("never come to here\n");
+    }
+
+
+    next->next = head;
+    head->next = NULL;
+
+    return p;
 }
-#endif
 
 void dump_list(struct list *head)
 {
+    int cnt = 0;
     struct list *p = NULL;
 
     p = head->next;
 
+    printf("============================\n");
     while (p) {
         printf("[%d]\n",p->data);
         p = p->next;
+        if (cnt++ > 200) {
+            printf("dump error\n");
+            break;
+        }
     }
+    printf("============================\n");
 
     return;
 }
 
-int main(void)
+int list_mng_test(int len)
 {
     struct list head = {0};
     int cnt = 0;
 
-    generate_a_list(&head);
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    printf("START len = %d\n", len);
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    generate_a_list(&head, len);
+    //dump_list(&head);
 
     cnt = get_list_cnt(&head);
     printf("cnt = %d\n", cnt);
 
     struct list *N = NULL;
     N = reverse_list(&head);
+    cnt = get_list_cnt(N);
+    printf("cnt = %d\n", cnt);
     dump_list(N);
 
+    if (N->next) {
+        N->next = reverse_list2(N->next, N->next->next);
+        dump_list(N);
+    }
+    printf("<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
+    printf("END len = %d\n", len);
+    printf("<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
+
     return 0;
+}
+
+int main(void)
+{
+    list_mng_test(0);
+    list_mng_test(1);
+    list_mng_test(2);
+    list_mng_test(10);
 }
