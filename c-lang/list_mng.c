@@ -227,6 +227,11 @@ struct list * find_last_k(struct list *head, int k)
         i++;
     }
 
+    if (NULL == p) {
+        printf("length of list is less than k[%d]\n", k);
+        return NULL;
+    }
+
     while (p) {
         p = p->next;
         k_t = k_t->next;
