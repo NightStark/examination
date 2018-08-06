@@ -163,10 +163,47 @@ int list_mng_test(int len)
     return 0;
 }
 
+struct list * find_last_k(struct list *head, int k)
+{
+    int i = 0;
+    struct list *p = NULL; 
+    struct list *k_t = NULL;
+
+    if (!head) {
+        return NULL;
+    }
+
+    p = head->next;
+    k_t = p;
+
+    while (p && (i < k)) {
+        p = p->next;
+        i++;
+    }
+
+    while (p) {
+        p = p->next;
+        k_t = k_t->next;
+    }
+
+    return k_t;
+}
+
 int main(void)
 {
     list_mng_test(0);
     list_mng_test(1);
     list_mng_test(2);
     list_mng_test(10);
+
+    struct list F = {0};
+    struct list *lk = NULL;
+
+    generate_a_list(&F, 15);
+    lk = find_last_k(&F, 5);
+    dump_list(&F);
+
+    printf("lk = %d\n", lk->data);
+    
+
 }
