@@ -55,6 +55,40 @@ int generate_a_list(struct list *head, int cnt)
     return 0;
 }
 
+int make_a_loop_in_list(struct list *head, int index)
+{
+    int i = 0;
+    struct list *T = NULL;
+    struct list *L = NULL;
+
+    T = head->next;
+
+    if (NULL == T) {
+        return -1;
+    }
+
+    while (T) {
+        if (i >= index) {
+            L = T;
+            break;
+        }
+        T = T->next;
+        i++;
+    }
+
+    if (NULL == L || NULL == T) {
+        return -1;
+    }
+
+    while (T->next) {
+        T = T->next;
+    }
+
+    T->next = L;
+
+    return 0;
+}
+
 int generate_two_list(struct list *head1, struct list *head2, int cnt)
 {
     struct list *p = NULL;
@@ -218,6 +252,30 @@ void swap_two_node(struct list *head, int data)
     return;
 }
 
+int find_loop_in_list(struct list *head)
+{
+    struct list *Fast = NULL;
+    struct list *Slow = NULL;
+
+    Fast = head->next;
+    Slow = Fast;
+
+    if (NULL == Fast) {
+        return 0;
+    }
+
+    while (Fast && Fast->next) {
+        Fast = Fast->next->next;
+        Slow = Slow->next;
+        if (Fast == Slow) {
+            printf("find loop\n");
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 int list_mng_test(int len)
 {
     struct list head = {0};
@@ -331,11 +389,12 @@ int main(void)
     M.next = merge_sorted_list(A.next, B.next);
     dump_list(&M);
 
-    struct list S = {0};
-    generate_a_list(&S, 2);
-    dump_list(&S);
-    swap_two_node(&S, 0);
-    dump_list(&S);
+    struct list LOOP = {0};
+    generate_a_list(&LOOP, 10);
+    //dump_list(&LOOP);
+    make_a_loop_in_list(&LOOP, 5);
+    //dump_list(&LOOP);
+    find_loop_in_list(&LOOP);
 
     return 0;
 }
