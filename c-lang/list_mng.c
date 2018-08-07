@@ -319,40 +319,64 @@ int find_loop_in_list(struct list *head)
     return 0;
 }
 
-#if 0
-int check_two_list_is_intersected(struct list *head1, struct list *head2)
+struct list * get_first_comm_note_of_intersected(struct list *head1, struct list *head2)
 {
     struct list *a = NULL;
     struct list *b = NULL;
-    int len_a = 0;
-    int len_b = 0;
 
-    if (NULL == head1 || NULL == head1->next) {
-        return -1;
+    if (head1 == NULL || head1->next == NULL) {
+        return NULL;
     }
-    if (NULL == head2 || NULL == head2->next) {
-        return -1;
+    if (head2 == NULL || head2->next == NULL) {
+        return NULL;
     }
 
     a = head1->next;
     b = head2->next;
 
+    int len_a = 0;
+    int len_b = 0;
+
     while (a) {
         len_a++;
         a = a->next;
     }
+
     while (b) {
         len_b++;
         b = b->next;
     }
 
-    if (len_a > len_b) {
-    }
-    
+    int diff = 0;
+    a = head1->next;
+    b = head2->next;
 
-    return 0;
+    if (len_a > len_b) {
+        diff = len_a - len_b;
+        while (diff--) {
+            a = a->next;
+        }
+    } else {
+        diff = len_b - len_a;
+        while (diff--) {
+            b = b->next;
+        }
+    }
+
+    while (a != b) {
+        a = a->next;
+        b = b->next;
+    }
+
+    if (NULL == a || NULL == b) {
+        printf("this two list is not intersected.\n");    
+        return NULL;
+    }
+
+    printf("find comm node, data = [%d]\n", a->data);
+
+    return a;
 }
-#endif
 
 int check_two_list_is_intersected(struct list *head1, struct list *head2)
 {
@@ -516,6 +540,7 @@ int main(void)
     dump_list(&IN_B);
 
     check_two_list_is_intersected(&IN_A, &IN_B);
+    get_first_comm_note_of_intersected(&IN_A, &IN_B);
 
     return 0;
 }
