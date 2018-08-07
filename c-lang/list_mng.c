@@ -89,8 +89,51 @@ int make_a_loop_in_list(struct list *head, int index)
     return 0;
 }
 
-int generate_two_list(struct list *head1, struct list *head2, int cnt)
+int let_two_list_intersect(struct list *head1, struct list *head2, int h1_index)
 {
+    /*                             h1_index
+     *                             V
+     * head1 ______________________.______________
+     *                            /
+     * head2 ____________________/
+     * */
+
+    int i = 0;
+    struct list * a = NULL;
+    struct list * b = NULL;
+
+    if (NULL == head1 || NULL == head1->next) {
+        return -1;
+    }
+    if (NULL == head2 || NULL == head2->next) {
+        return -1;
+    }
+
+    a = head1->next;
+    b = head2->next;
+
+    while (a) {
+        if (i >= h1_index) {
+            break;
+        }
+        a = a->next;
+        i++;
+    }
+
+    if (NULL == a) {
+        return -1;
+    }
+
+    while (b->next) {
+        b = b->next;
+    }
+
+    b->next = a;
+
+    return 0;
+} 
+
+int generate_two_list(struct list *head1, struct list *head2, int cnt) {
     struct list *p = NULL;
 
     struct list *t1 = NULL;
@@ -276,6 +319,72 @@ int find_loop_in_list(struct list *head)
     return 0;
 }
 
+#if 0
+int check_two_list_is_intersected(struct list *head1, struct list *head2)
+{
+    struct list *a = NULL;
+    struct list *b = NULL;
+    int len_a = 0;
+    int len_b = 0;
+
+    if (NULL == head1 || NULL == head1->next) {
+        return -1;
+    }
+    if (NULL == head2 || NULL == head2->next) {
+        return -1;
+    }
+
+    a = head1->next;
+    b = head2->next;
+
+    while (a) {
+        len_a++;
+        a = a->next;
+    }
+    while (b) {
+        len_b++;
+        b = b->next;
+    }
+
+    if (len_a > len_b) {
+    }
+    
+
+    return 0;
+}
+#endif
+
+int check_two_list_is_intersected(struct list *head1, struct list *head2)
+{
+    struct list *a = NULL;
+    struct list *b = NULL;
+
+    if (NULL == head1 || NULL == head1->next) {
+        return -1;
+    }
+    if (NULL == head2 || NULL == head2->next) {
+        return -1;
+    }
+
+    a = head1->next;
+    b = head2->next;
+
+    while (a->next) {
+        a = a->next;
+    }
+    while (b->next) {
+        b = b->next;
+    }
+
+    if (a == b) {
+        printf("two list IS INTERSECT.\n");
+    } else {
+        printf("two list is NOT intersect.\n");
+    }
+
+    return 0;
+}
+
 int list_mng_test(int len)
 {
     struct list head = {0};
@@ -395,6 +504,18 @@ int main(void)
     make_a_loop_in_list(&LOOP, 5);
     //dump_list(&LOOP);
     find_loop_in_list(&LOOP);
+
+
+    struct list IN_A = {0};
+    struct list IN_B = {0};
+    generate_a_list(&IN_A, 15);
+    generate_a_list(&IN_B, 10);
+
+    let_two_list_intersect(&IN_A, &IN_B, 8);
+    dump_list(&IN_A);
+    dump_list(&IN_B);
+
+    check_two_list_is_intersected(&IN_A, &IN_B);
 
     return 0;
 }
