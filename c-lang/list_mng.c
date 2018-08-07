@@ -178,6 +178,46 @@ void dump_list(struct list *head)
     return;
 }
 
+void swap_two_node(struct list *head, int data)
+{
+    struct list *P = NULL; 
+    struct list *T = NULL; 
+    struct list *N = NULL; 
+
+    P = head->next;
+
+    if (NULL == P) {
+        return;
+    }
+    T = P->next;
+    if (NULL == T) {
+       return; 
+    }
+
+    N = T->next;
+    if (NULL == N) {
+        if(P->data == data) {
+            T->next = P;
+            P->next = NULL;
+            head->next = T;
+        }
+        return;
+    }
+    while (T) {
+        if (T->data == data) {
+            T->next = N->next;
+            N->next = T;
+            P->next = N;
+            break;
+        }
+        P = T;
+        T = N;
+        N = N->next;
+    }
+
+    return;
+}
+
 int list_mng_test(int len)
 {
     struct list head = {0};
@@ -202,6 +242,15 @@ int list_mng_test(int len)
         N->next = reverse_list2(N->next, N->next->next);
         dump_list(N);
     }
+
+    struct list S = {0};
+    generate_a_list(&S, len);
+
+    swap_two_node(&S, len < 2 ? 0 : len / 2);
+    printf("SWAP TWO NODE len=%d len/2=%d >>> \n", len, len/2);
+    dump_list(&S);
+    printf("SWAP TWO NODE <<< \n");
+
     printf("<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
     printf("END len = %d\n", len);
     printf("<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
@@ -282,4 +331,11 @@ int main(void)
     M.next = merge_sorted_list(A.next, B.next);
     dump_list(&M);
 
+    struct list S = {0};
+    generate_a_list(&S, 2);
+    dump_list(&S);
+    swap_two_node(&S, 0);
+    dump_list(&S);
+
+    return 0;
 }
