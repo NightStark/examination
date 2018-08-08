@@ -3,7 +3,7 @@
 #include <string.h>
 
 /*
- * 合并两个有序的链表，合并后仍然有序。
+ * 合并两个有序的数组，合并后仍然有序。
  * */
 char * merge_two_sorted_array(char *arr1, int a1_len, char *arr2, int a2_len)
 {
